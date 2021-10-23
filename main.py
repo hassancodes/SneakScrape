@@ -11,16 +11,6 @@ from openpyxl import Workbook
 
 
 
-styleCodes = load_workbook(filename="StyleCodes.xlsx")
-
-print(dir(styleCodes))
-func()
-sheet = styleCodes.active
-print(sheet)
-func()
-
-stylecodeList = [x.value for x in sheet["A"]]
-print(stylecodeList[1:])
 
 
 

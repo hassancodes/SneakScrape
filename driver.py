@@ -37,22 +37,30 @@ driver.get("https://www.goat.com/search?query=eg6608")
 driver.implicitly_wait(10)
 
 
-driverCookies  = driver.get_cookies()
-print(driverCookies)
 
-rs = requests.Session()
-cookies = parseCookies(driverCookies[0])
-print()
-print("cookies from functions : " ,cookies)
-print()
-res = rs.get("https://www.goat.com/sneakers/ubiq-x-crazy-byw-2-0-sister-cities-ubiq-byw-2" ,cookies=cookies)
-print(res.status_code)
+# driverCookies  = driver.get_cookies()
+# print(driverCookies)
+driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[4]/div/div[3]/div[4]/div/ul/div[1]/div[1]/div/a/div/div/div[3]").click()
+driver.implicitly_wait(5)
 
-print("\n")
-print(res.content)
-print("\n")
+driver.refresh();
 
-print(res.text)
+driver.implicitly_wait(5)
+
+driver.refresh();
+# rs = requests.Session()
+# cookies = parseCookies(driverCookies[0])
+# print()
+# print("cookies from functions : " ,cookies)
+# print()
+# res = rs.get("https://www.goat.com/sneakers/ubiq-x-crazy-byw-2-0-sister-cities-ubiq-byw-2" ,cookies=cookies)
+# print(res.status_code)
+#
+# print("\n")
+# print(res.content)
+# print("\n")
+#
+# print(res.text)
 
 
 

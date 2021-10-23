@@ -1,5 +1,4 @@
 # file for working with excel
-
 import openpyxl
 from openpyxl import load_workbook
 from openpyxl import Workbook
@@ -15,7 +14,5 @@ def getStyteCode():
 # main style code list
     StyleCodeList = rawsdList[1:]
 
-    print("Total Style codes: ",len(StyleCodeList))
+    # print("Total Style codes: ",len(StyleCodeList))
     return StyleCodeList
-
-print(getStyteCode())
