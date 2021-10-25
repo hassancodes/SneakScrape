@@ -36,55 +36,57 @@ from useragent import ua
 
 
 # request start from here
-request = requests.Session()
-headers = {
-    'User-Agent': ua(),
-    'Accept-Language': 'en-US,en;q=0.5'
-    }
+# request = requests.Session()
+# headers = {
+#     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
+#     'Accept-Language': 'en-US,en;q=0.5',
+#     }
+#
+# cookies = {
+#     'stockx_homepage': "sneakers",
+#     }
+#
+# time.sleep(10)
+#
+# soup = BeautifulSoup(request.get("https://stockx.com/search?s=eg6608", headers=headers, cookies=cookies).content,"lxml")
+#
+# bod = soup.body
+# div = bod.find_all("div", class_="css-h8htgv")
+#
+# # checking for the first shoe
+# a = div[0].find_all('p')
+#
+# print(a)
+#
+# # 2nd functions
+# sneakNameprice = []
+# for i in a:
+#     sneakNameprice.append(i.get_text())
+#
+#
+#
+#
+# # print(createUrl("adidas Crazy BYW X 2.0 Ubiq"))
+#
+# mainURL = f"https://stockx.com/{createUrl(sneakNameprice[0])}"
+# print("timedelay...")
+# time.sleep(10)
+#
+# soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies).content,"lxml")
+#
+# time.sleep(10)
+# pprint.pprint(soupmain.body)
+#
+# # print(soupmain.body)
+#
+# bodmain = soupmain.body
+# print(soupmain.body)
 
-cookies = {
-    'stockx_homepage': "sneakers",
-    }
+with open("test.html", "r") as fp:
 
-time.sleep(10)
+# fetch the scripts using div
 
-soup = BeautifulSoup(request.get("https://stockx.com/search?s=eg6608", headers=headers, cookies=cookies).content,"lxml")
-
-bod = soup.body
-div = bod.find_all("div", class_="css-h8htgv")
-
-# checking for the first shoe
-a = div[0].find_all('p')
-
-
-# 2nd functions
-sneakNameprice = []
-for i in a:
-    sneakNameprice.append(i.get_text())
-
-
-
-
-# print(createUrl("adidas Crazy BYW X 2.0 Ubiq"))
-mainURL = f"https://stockx.com/{createUrl(sneakNameprice[0])}"
-print("timedelay...")
-time.sleep(10)
-
-headersmain = {
-    'User-Agent': ua(),
-    'Accept-Language': 'en-US,en;q=0.5'
-    }
-
-soupmain = BeautifulSoup(request.get(mainURL,headers=headersmain, cookies=cookies).content,"lxml")
-
-time.sleep(10)
-pprint.pprint(soupmain.body)
-
-print(soupmain.body)
-
-print("\n \n \n \n \n")
-bodmain = soupmain.body
-divmain = bodmain.find_all("div", class_="css-1s359ds")
+divmain = bodmain.find_all("div", class_="chakra-container css-vp2g1e")
 
 print(len(divmain))
 
