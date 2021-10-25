@@ -9,19 +9,25 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 # from helpfuncs
 from helpfuncstx import createUrl
+from useragent import ua
 
 
-op = Options()
+# op = Options()
+# op.add_experimental_option("excludeSwitches", ["enable-automation"])
+# op.add_experimental_option('useAutomationExtension', False)
+# op.add_argument("start-maximized")
+# op.add_argument(r"user-data-dir=C:\Users\hassa\AppData\Local\Google\Chrome Dev\User Data\ninja")
+#
+#
+#
+# driver = webdriver.Chrome('./chromedriver', keep_alive=True, options=op)
+# driver.get("https://google.com")
+#
+# driver.implicitly_wait(10)
+#
+# driver.get("https://github.com")
 
-op.add_experimental_option("excludeSwitches", ["enable-automation"])
-op.add_experimental_option('useAutomationExtension', False)
-op.add_argument("start-maximized")
 
-
-
-
-driver = webdriver.Chrome('./chromedriver', keep_alive=True, options=op)
-driver.get("https://google.com")
 
 
 
@@ -30,54 +36,61 @@ driver.get("https://google.com")
 
 
 # request start from here
-# request = requests.Session()
-# headers = {
-#     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
-#     'Accept-Language': 'en-US,en;q=0.5'
-#     }
-#
-# cookies = {
-#     'stockx_homepage': "sneakers",
-#     }
-#
-# soup = BeautifulSoup(request.get("https://stockx.com/search?s=eg6608", headers=headers, cookies=cookies).content,"lxml")
-#
-# bod = soup.body
-# div = bod.find_all("div", class_="css-h8htgv")
-#
-# # checking for the first shoe
-# a = div[0].find_all('p')
-#
-#
-# # 2nd functions
-# sneakNameprice = []
-# for i in a:
-#     sneakNameprice.append(i.get_text())
-#
-#
-#
-#
-# # print(createUrl("adidas Crazy BYW X 2.0 Ubiq"))
-# mainURL = f"https://stockx.com/{createUrl(sneakNameprice[0])}"
-# print("timedelay...")
-# time.sleep(10)
-#
-# # soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies).content,"lxml")
-# # pprint.pprint(soupmain.body)
-# #
-# # print(soupmain.body)
-# #
-# # print("\n \n \n \n \n")
-# # bodmain = soupmain.body
-# # divmain = bodmain.find_all("div", class_="css-1s359ds")
-# #
-# # print(len(divmain))
-# #
-# # print(divmain)
-#
-# driver.get("")
+request = requests.Session()
+headers = {
+    'User-Agent': ua(),
+    'Accept-Language': 'en-US,en;q=0.5'
+    }
+
+cookies = {
+    'stockx_homepage': "sneakers",
+    }
+
+time.sleep(10)
+
+soup = BeautifulSoup(request.get("https://stockx.com/search?s=eg6608", headers=headers, cookies=cookies).content,"lxml")
+
+bod = soup.body
+div = bod.find_all("div", class_="css-h8htgv")
+
+# checking for the first shoe
+a = div[0].find_all('p')
 
 
+# 2nd functions
+sneakNameprice = []
+for i in a:
+    sneakNameprice.append(i.get_text())
+
+
+
+
+# print(createUrl("adidas Crazy BYW X 2.0 Ubiq"))
+mainURL = f"https://stockx.com/{createUrl(sneakNameprice[0])}"
+print("timedelay...")
+time.sleep(10)
+
+headersmain = {
+    'User-Agent': ua(),
+    'Accept-Language': 'en-US,en;q=0.5'
+    }
+
+soupmain = BeautifulSoup(request.get(mainURL,headers=headersmain, cookies=cookies).content,"lxml")
+
+time.sleep(10)
+pprint.pprint(soupmain.body)
+
+print(soupmain.body)
+
+print("\n \n \n \n \n")
+bodmain = soupmain.body
+divmain = bodmain.find_all("div", class_="css-1s359ds")
+
+print(len(divmain))
+
+print(divmain)
+
+# driver.get(mainURL)
 
 
 
