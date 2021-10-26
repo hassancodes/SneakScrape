@@ -82,15 +82,17 @@ from useragent import ua
 # bodmain = soupmain.body
 # print(soupmain.body)
 
-with open("test.html", "r") as fp:
 
-# fetch the scripts using div
+# fetching scripts
+with open("test.html", "r", encoding="utf-8") as fp:
+    soup = BeautifulSoup(fp.read(), "lxml")
 
-divmain = bodmain.find_all("div", class_="chakra-container css-vp2g1e")
 
-print(len(divmain))
+    divmain = soup.find_all("script")
 
-print(divmain)
+    print(len(divmain))
+
+    print(divmain[7])
 
 # driver.get(mainURL)
 
