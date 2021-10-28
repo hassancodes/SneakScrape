@@ -121,6 +121,7 @@ print(type(rjsoup))
 with open("data.json" , "w") as dj:
     readyJson = json.loads(rjsoup.text)
     func()
+    # ready json is main json that have the data but still need to be cleaned
     print("readyJson: " , readyJson)
     func()
     json.dump(readyJson,dj)
@@ -136,6 +137,22 @@ with open("data.json" , "w") as dj:
             pprint.pprint(readyJson[i]["traits"])
         else:
             pass
+
+
+
+
+# required exact keys to target from ready json
+# "primaryTitle"
+# "Traits" (required data for excel is in here)
+# "styleId"
+# "brand"
+# "Media" to get the url and image
+
+
+
+
+
+
 
 # # fetching scripts
 # # 35435:36173
