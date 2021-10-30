@@ -50,8 +50,9 @@ cookies = {
 time.sleep(10)
 
 
-# logic needs to be added
-soup = BeautifulSoup(request.get("https://stockx.com/search?s=DD1391-003", headers=headers, cookies=cookies).content,"lxml")
+# logic needs to be added keep chaning the shoe style
+
+soup = BeautifulSoup(request.get("https://stockx.com/search?s=GW3355", headers=headers, cookies=cookies).content,"lxml")
 
 bod = soup.body
 div = bod.find_all("div", class_="css-h8htgv")
@@ -118,6 +119,9 @@ rjsoup = BeautifulSoup(rawjson, "lxml")
 print("rjsoup:" , rjsoup)
 print(type(rjsoup))
 
+
+readyDict = {}
+
 with open("data.json" , "w") as dj:
     readyJson = json.loads(rjsoup.text)
     func()
@@ -132,11 +136,22 @@ with open("data.json" , "w") as dj:
     for i in readyJson:
         if i.startswith("Product"):
             print(i)
-            print("\n \n \n")
-            pprint.pprint(readyJson[i]["primaryTitle"])
-            pprint.pprint(readyJson[i]["traits"])
+
+            func()
+
+            readyDict["title"] = readyJson[i]["primaryTitle"]
+            readyDict["brand"] = readyJson[i]["brand"]
+            readyDict["traits"]  = readyJson[i]["traits"]
+
+            # contains the url for the shoes, it maybe helpful so i added it into the sheet
+            readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
+
         else:
             pass
+
+print(readyDict)
+
+
 
 
 
@@ -147,6 +162,8 @@ with open("data.json" , "w") as dj:
 # "styleId"
 # "brand"
 # "Media" to get the url and image
+
+lol = {'title': 'Nike Dunk Low', 'brand': 'Nike', 'traits': [{'__typename': 'Traits', 'name': 'Style', 'value': 'DD1391-003'}, {'__typename': 'Traits', 'name': 'Colorway', 'value': 'Midnight Navy/Championship Grey-White'}, {'__typename': 'Traits', 'name': 'Retail Price', 'value': '100'}, {'__typename': 'Traits', 'name': 'Release Date', 'value': '2021-11-05'}, {'__typename': 'Traits', 'name': 'Featured', 'value': 'false'}], 'media': {'__typename': 'Media', 'imageUrl': 'https://images.stockx.com/images/Nike-Dunk-Low-Georgetown-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1634918141', 'smallImageUrl': 'https://images.stockx.com/images/Nike-Dunk-Low-Georgetown-Product.jpg?fit=fill&bg=FFFFFF&w=300&h=214&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1634918141', 'gallery': [], 'all360Images': ['https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img01.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img02.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img03.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img04.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img05.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img06.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img07.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img08.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img09.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img10.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img11.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img12.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img13.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img14.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img15.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img16.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img17.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img18.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img19.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img20.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img21.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img22.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img23.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img24.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img25.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img26.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img27.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img28.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img29.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img30.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img31.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img32.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img33.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img34.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img35.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141', 'https://images.stockx.com/360/Nike-Dunk-Low-Georgetown/Images/Nike-Dunk-Low-Georgetown/Lv2/img36.jpg?auto=format,compress&w=559&q=90&dpr=2&updated_at=1634918141'], 'thumbUrl': 'https://images.stockx.com/images/Nike-Dunk-Low-Georgetown-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=100&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1634918141'}}
 
 
 
