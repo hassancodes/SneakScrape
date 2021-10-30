@@ -2,12 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import pprint
 import json
-
 import time
-import requests
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
+
+# from selenium import webdriver
+# from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.chrome.options import Options
 # from helpfuncs
 from helpfuncstx import createUrl
 from useragent import ua
