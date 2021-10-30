@@ -104,6 +104,8 @@ print("ScriptIndex : ", scriptindex)
 # print(str(scriptindex)[37:-13].strip())
 # using bs4 again to re itterate over the script tag
 # jsoup = BeautifulSoup(scriptindex, "lxml")
+
+# removing the tags and trailing spaces
 rawjson = str(scriptindex)[41:-15].strip()
 pprint.pprint(rawjson)
 func()
