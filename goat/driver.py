@@ -2,11 +2,21 @@ import time
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
+
+
 
 # Own files
 from Excel import getStyteCode
 
+
+# customizing
+op = Options()
+op.add_experimental_option("excludeSwitches", ["enable-automation"])
+op.add_experimental_option('useAutomationExtension', False)
+op.add_argument("start-maximized")
+op.add_argument(r"user-data-dir=C:\Users\hassa\AppData\Local\Google\Chrome Dev\User Data\ninja")
 
 
 styleCodes = getStyteCode()
@@ -31,7 +41,7 @@ def parseCookies(selcookies):
 
 
 
-driver = webdriver.Chrome('./chromedriver', keep_alive=True)
+driver = webdriver.Chrome('./chromedriver', keep_alive=True, options=op)
 # add different style codes later
 driver.get("https://www.goat.com/search?query=eg6608")
 driver.implicitly_wait(10)

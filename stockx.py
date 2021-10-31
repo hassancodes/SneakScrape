@@ -4,11 +4,9 @@ import pprint
 import json
 import time
 
-# from selenium import webdriver
-# from selenium.webdriver.common.keys import Keys
-# from selenium.webdriver.chrome.options import Options
-# from helpfuncs
-from helpfuncstx import createUrl
+
+# help functions are all present in helpfuncstx.py
+from helpfuncstx import createUrl,getStyteCode
 from useragent import ua
 
 def func():
@@ -18,24 +16,8 @@ def func():
     print("\n")
     print("\n")
 
-# op = Options()
-# op.add_experimental_option("excludeSwitches", ["enable-automation"])
-# op.add_experimental_option('useAutomationExtension', False)
-# op.add_argument("start-maximized")
-# op.add_argument(r"user-data-dir=C:\Users\hassa\AppData\Local\Google\Chrome Dev\User Data\ninja")
-#
-#
-#
-# driver = webdriver.Chrome('./chromedriver', keep_alive=True, options=op)
-# driver.get("https://google.com")
-#
-# driver.implicitly_wait(10)
-#
-# driver.get("https://github.com")
-
 
 # request main function
-
 request = requests.Session()
 headers = {
     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
@@ -70,9 +52,6 @@ for i in a:
 
 
 print(sneakNameprice)
-func()
-# print(createUrl("adidas Crazy BYW X 2.0 Ubiq"))
-
 
 mainURL = f"https://stockx.com/{createUrl(sneakNameprice[0])}"
 # print(mainURL)
@@ -88,28 +67,19 @@ time.sleep(10)
 # print(soupmain.body)
 
 bodmain = soupmain.body
-# print(bodmain)
-func()
 
-
-# print(soupmain.body)
 scriptmain = bodmain.find_all("script")
 print("Length of script main: " , len(scriptmain))
 # getting the script with index
 scriptindex = scriptmain[7]
-print("ScriptIndex : ", scriptindex)
-
-
-# print(str(scriptindex)[37:-13].strip())
-# using bs4 again to re itterate over the script tag
-# jsoup = BeautifulSoup(scriptindex, "lxml")
+# print("ScriptIndex : ", scriptindex)
 
 # removing the tags and trailing spaces
 rawjson = str(scriptindex)[41:-15].strip()
 pprint.pprint(rawjson)
 func()
-print("raw json")
-print(type(rawjson))
+# print("raw json")
+# print(type(rawjson))
 
 
 #
@@ -140,17 +110,25 @@ with open("data.json" , "w") as dj:
 
             func()
 
+            # title aka name
             readyDict["title"] = readyJson[i]["primaryTitle"]
             readyDict["brand"] = readyJson[i]["brand"]
             readyDict["traits"]  = readyJson[i]["traits"]
 
             # contains the url for the shoes, it maybe helpful so i added it into the sheet
             readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
-
         else:
             pass
 
-print(readyDict)
+pprint.pprint(readyDict)
+
+# function to parse dictionary
+# def parseDict(dict):
+    # for k,v in dict.items():
+
+
+
+
 
 
 
