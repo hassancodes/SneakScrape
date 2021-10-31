@@ -142,7 +142,8 @@ actdict= {'brand': 'adidas',
 # [style, colorway, price ,releasedate]
 
 
-
+from openpyxl import load_workbook
+from openpyxl import Workbook
 def addtoExcel(mydict):
 
 
@@ -154,8 +155,15 @@ def addtoExcel(mydict):
     price = mydict["traits"][2]["value"]
     releaseDate = mydict["traits"][3]["value"]
 
+    stylecodes = load_workbook(filename="StyleCodes.xlsx")
+    sheet = stylecodes.worksheets[0]
+    # sheet["B5"].value == "Hello"
+    print(sheet)
 
-# v
+
+
+    # stylecodes.save("StyleCodes.xlsx")
+
 addtoExcel(actdict)
 
 
