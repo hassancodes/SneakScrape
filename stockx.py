@@ -155,6 +155,7 @@ def addtoExcel(mydict):
     releaseDate = mydict["traits"][3]["value"]
 
 
+# v
 addtoExcel(actdict)
 
 
