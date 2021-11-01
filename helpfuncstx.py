@@ -2,7 +2,7 @@ import openpyxl
 from openpyxl import load_workbook
 from openpyxl import Workbook
 from fake_useragent import UserAgent
-
+from random import randint
 
 ####################################################################
 ####################################################################
@@ -30,7 +30,7 @@ def getStyteCode():
 
     styleCodes = load_workbook(filename="StyleCodes.xlsx")
     sheet = styleCodes.active
-    print(sheet)
+    # print(sheet)
 
     rawsdList = [x.value for x in sheet["A"]]
 # main style code list
@@ -46,3 +46,6 @@ def ua():
 
     ua = UserAgent()
     return ua.chrome
+
+def spacefunc():
+    print("\n")
