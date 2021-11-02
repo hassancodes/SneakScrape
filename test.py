@@ -30,10 +30,26 @@ mydict = {
 }]
 }
 
-print(type(mydict))
-
-# "mango" if i%3==0 else "orange" for i in range(10)
 
 
-ls = [mydict["traits"][x]["value"] if mydict.get("traits")[x].get("name")=="Release Date" else "Not Found" for x in range(len(mydict.get("traits")))]
-print(ls)
+sequence = ["Style" ,"Colorway" , "Retail Price","Release Date" ]
+
+# function for seperating the found data from the "not found elements"
+def checkFound(ls):
+    if all(element == ls[0] for element in ls):
+        dataList.append("Not Found")
+    else:
+        list(filter(lambda x: dataList.append(x) if x!="Not Found" else "pass",ls))
+
+
+dataList = []
+for i in sequence:
+    als = [mydict["traits"][x]["value"] if mydict.get("traits")[x].get("name")==i else "Not Found" for x in range(len(mydict.get("traits")))]
+    checkFound(als)
+
+
+
+
+
+
+print(dataList)

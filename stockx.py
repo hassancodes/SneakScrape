@@ -18,6 +18,12 @@ def fetchsource(stylecode):
     cookies = {
         'stockx_homepage': "sneakers",
         }
+###############################################################################################################
+###############################################################################################################
+# you can add proxies here
+    # proxies = {
+    #
+    # }
     soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers, cookies=cookies).content,"lxml")
     bod = soup.body
     div = bod.find_all("div", class_="css-h8htgv")
@@ -54,6 +60,8 @@ def fetchsource(stylecode):
         scriptindex = scriptlist[6]
         rawjson = str(scriptindex)[41:-15].strip()
         return rawjson
+    elif len(scriptlist) == 24:
+        print(scriptlist)
     else:
         rawjson = {}
         return rawjson
@@ -105,14 +113,48 @@ def addtoExcel(mydict,counter):
     # uselessly validation 😂 but necessary
     if  len(mydict)>2:
 
-# need to work here tomorrow
+# # need to work here tomorrow
+# ["Not Found" for x in mydict if mydict.get("traits")[x].get("name") !="Style" else mydict["traits"][0]["value"]]
         title = "Not Found" if mydict.get("title")==None else mydict["title"]
         brand = "Not Found" if mydict.get("brand")==None else mydict["brand"]
         url = "Not Found" if mydict.get("media")==None else mydict["media"]
-        styleId = "Not Found" if mydict.get("traits")[0].get("name") !="Style" else mydict["traits"][0]["value"]
-        colorway = "Not Found" if mydict.get("traits")[1].get("name") !="Colorway" else mydict["traits"][1]["value"]
-        price = "Not Found" if mydict.get("traits")[2].get("name") !="Retail Price" else mydict["traits"][2]["value"]
-        releaseDate = "Not Found" if mydict.get("traits")[3].get("name") !="Release Date" else mydict["traits"][3]["value"]
+
+        # # write logic after this
+        # styleId = "Not Found" if mydict.get("traits")[0].get("name") !="Style" else mydict["traits"][0]["value"]
+        # colorway = "Not Found" if mydict.get("traits")[1].get("name") !="Colorway" else mydict["traits"][1]["value"]
+        # price = "Not Found" if mydict.get("traits")[2].get("name") !="Retail Price" else mydict["traits"][2]["value"]
+        # releaseDate = "Not Found" if mydict.get("traits")[3].get("name") !="Release Date" else mydict["traits"][3]["value"]
+        #
+        # # adding data to excel indices
+        # sheet[f"B{counter}"] = title
+        # sheet[f"C{counter}"] = colorway
+        # sheet[f"D{counter}"] = price
+        # sheet[f"E{counter}"] = releaseDate
+        # sheet[f"F{counter}"] = brand
+
+        sequence = ["Style" ,"Colorway" , "Retail Price","Release Date" ]
+        dataList = []
+        # function for seperating the found data from the "not found elements"
+        def checkFound(ls):
+            if all(element == ls[0] for element in ls):
+                dataList.append("Not Found")
+            else:
+                list(filter(lambda x: dataList.append(x) if x!="Not Found" else "pass",ls))
+
+
+
+
+        for i in sequence:
+            # this list contains the items, if not present in the json  fetched by the web it will be replaced by "not Found"
+            rawList = [mydict["traits"][x]["value"] if mydict.get("traits")[x].get("name")==i else "Not Found" for x in range(len(mydict.get("traits")))]
+            checkFound(rawList)
+        print(dataList)
+        styleId = dataList[0]
+        colorway = dataList[1]
+        price = dataList[2]
+        releaseDate = dataList[3]
+
+
 
         # adding data to excel indices
         sheet[f"B{counter}"] = title
@@ -120,6 +162,7 @@ def addtoExcel(mydict,counter):
         sheet[f"D{counter}"] = price
         sheet[f"E{counter}"] = releaseDate
         sheet[f"F{counter}"] = brand
+        sheet[f"G{counter}"] = url
 
         print(f"added data to index {counter}")
     else:
@@ -144,6 +187,7 @@ def iterate(sclist):
         rawjson = fetchsource(sclist[i])
         readydict = parseJson(rawjson)
         # make sure to add a counter
+        break
         addtoExcel(readydict,counter)
         time.sleep(random.randint(50,100))
 
