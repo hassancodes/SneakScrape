@@ -29,15 +29,11 @@ def fetchsource(stylecode):
     # }
     soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers, cookies=cookies).content,"lxml")
     bod = soup.body
-
-    # print("bod:" , bod)
     div = bod.find_all("div", class_="css-h8htgv")
     # checking for the first shoe
     try:
         a = div[0].find_all('p')
-        # print(a)
 
-        # 2nd functions
         # this list will have title, prize and one thing more that I forgot
         sneakdatalist = []
         for i in a:
@@ -54,25 +50,13 @@ def fetchsource(stylecode):
         spacefunc()
         # getting the script with index
 
-
-
-        if len(scriptlist) ==28:
-
-            # scriptindex = scriptlist[6]
-            scriptindex = parseDiv(scriptlist)
-            # print("scriptindex: " ,scriptindex)
-            rawjson = str(scriptindex)[41:-15].strip()
-            return rawjson
-
-
-        elif len(scriptlist) == 27:
-            # scriptindex = scriptlist[6]
+        if len(scriptlist) ==28 or len(scriptlist) == 27  or len(scriptlist) == 27:
             scriptindex = parseDiv(scriptlist)
             rawjson = str(scriptindex)[41:-15].strip()
             return rawjson
 
         elif len(scriptlist) == 24:
-            print(scriptlist)
+            return "Blocked"
         else:
             rawjson = {}
             return rawjson
@@ -85,36 +69,52 @@ def parseJson(rawjson):
 
     if rawjson == {}:
         return {}
+    # elif rawjson == "Blocked":
+
     elif rawjson != {}:
         rjsoup = BeautifulSoup(rawjson, "lxml")
-        # print(rjsoup)
-        # print("rjsoup:" , rjsoup)
-        # print(type(rjsoup))
         readyDict = {}
         with open("data.json" , "w") as dj:
-
             readyJson = json.loads(rjsoup.text)
             # ready json is main json that have the data but still need to be cleaned
             # print("readyJson: " , readyJson)
             spacefunc()
             json.dump(readyJson,dj)
             print("successfully added the json to data.json")
+
+            # print(readyJson["ROOT_QUERY"]["primaryTitle"])
+            # # print(readyJson["ROOT_QUERY"]["traits"])
+            counter = 0
             for i in readyJson:
-                print("i" , i)
-                if i.startswith("Product"):
-                    print(i)
-                    # title aka name
+                counter +=1
+                if counter == 2:
                     readyDict["title"] = readyJson[i]["primaryTitle"]
                     readyDict["brand"] = readyJson[i]["brand"]
                     readyDict["traits"]  = readyJson[i]["traits"]
-
-                    # contains the url for the shoes, it maybe helpful so i added it into the sheet
                     readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
                 else:
                     pass
-                break
+            print(readyDict)
 
-    return readyDict
+        return readyDict
+
+            #
+    #         for i in readyJson:
+    #             keycounter+=1
+    #             if keycounter==2:
+    #                 readyDict["title"] = readyJson[i]["primaryTitle"]
+    #                 readyDict["brand"] = readyJson[i]["brand"]
+    #                 readyDict["traits"]  = readyJson[i]["traits"]
+    #
+    #                 # contains the url for the shoes, it maybe helpful so i added it into the sheet
+    #                 readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
+    #
+    #
+    #             else:
+    #                 pass
+    #         print(readyDict)
+    #
+    # return readyDict
 
 ####################################################################
 def addtoExcel(mydict,counter):
