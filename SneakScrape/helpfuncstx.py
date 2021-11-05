@@ -26,9 +26,9 @@ def createUrl(SneakerName):
 ######################################################################
 
 # function for getting style codes from the excel sheet
-def getStyleCode():
+def getStyteCode():
 
-    styleCodes = load_workbook(filename="StyleCodes1.xlsx")
+    styleCodes = load_workbook(filename="StyleCodes.xlsx")
     sheet = styleCodes.active
     # print(sheet)
 
