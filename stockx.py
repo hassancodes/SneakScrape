@@ -170,7 +170,7 @@ def addtoExcel(mydict,counter):
 
 # # [Style Code	Name	Color	Price	Release Date	Brand]
 
-# # main logic
+# #main logic
 stylecodelist = getStyleCode()
 # stylecodelist = ["eg6608","b41990", "b22537"]
 def iterate(sclist):
