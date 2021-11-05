@@ -27,15 +27,11 @@ def createUrl(SneakerName):
 
 # function for getting style codes from the excel sheet
 def getStyleCode():
-
-    styleCodes = load_workbook(filename="StyleCodes1.xlsx")
+    styleCodes = load_workbook("StyleCodes.xlsx")
     sheet = styleCodes.active
-    # print(sheet)
-
     rawsdList = [x.value for x in sheet["A"]]
 # main style code list
     StyleCodeList = rawsdList[1:]
-
     # print("Total Style codes: ",len(StyleCodeList))
     return StyleCodeList
 
@@ -50,3 +46,13 @@ def ua():
 
 def spacefunc():
     print("\n")
+
+
+def parseDiv(ls):
+    for i in range(len(ls)):
+        stripped = str(ls[i]).strip()[8:].strip()
+        if stripped.startswith("window.__APOLLO_STATE_"):
+            return ls[i]
+            break
+        else:
+            pass

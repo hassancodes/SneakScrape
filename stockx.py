@@ -4,7 +4,7 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import pprint,json,time,random
 # help functions are all present in helpfuncstx.py
-from helpfuncstx import createUrl, getStyleCode, ua,spacefunc
+from helpfuncstx import createUrl, getStyleCode, ua,spacefunc, parseDiv
 
 
 
@@ -22,11 +22,15 @@ def fetchsource(stylecode):
 ###############################################################################################################
 ###############################################################################################################
 # you can add proxies here
-    # proxies = {
+    # request.proxy = {
     #
+    # "http" : "us-dynamic-1.resdleafproxies.com:17133",
+    #  "https" : "us-dynamic-1.resdleafproxies.com:17133"
     # }
     soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers, cookies=cookies).content,"lxml")
     bod = soup.body
+
+    # print("bod:" , bod)
     div = bod.find_all("div", class_="css-h8htgv")
     # checking for the first shoe
     try:
@@ -42,28 +46,31 @@ def fetchsource(stylecode):
         spacefunc()
         # generating product page link by using createUrl function
         mainURL = f"https://stockx.com/{createUrl(sneakdatalist[0])}"
-        # print(mainURL)
         print("timedelay...")
         time.sleep(10)
         soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies).content,"lxml")
-        # pprint.pprint(soupmain.body)
-        # print(soupmain.body)
         scriptlist = soupmain.body.find_all("script")
         print("Length of script Lists: " , len(scriptlist))
         spacefunc()
         # getting the script with index
 
+
+
         if len(scriptlist) ==28:
-            scriptindex = scriptlist[7]
-            print(scriptindex)
+
+            # scriptindex = scriptlist[6]
+            scriptindex = parseDiv(scriptlist)
+            # print("scriptindex: " ,scriptindex)
             rawjson = str(scriptindex)[41:-15].strip()
             return rawjson
 
 
         elif len(scriptlist) == 27:
-            scriptindex = scriptlist[6]
+            # scriptindex = scriptlist[6]
+            scriptindex = parseDiv(scriptlist)
             rawjson = str(scriptindex)[41:-15].strip()
             return rawjson
+
         elif len(scriptlist) == 24:
             print(scriptlist)
         else:
@@ -80,7 +87,7 @@ def parseJson(rawjson):
         return {}
     elif rawjson != {}:
         rjsoup = BeautifulSoup(rawjson, "lxml")
-        print(rjsoup)
+        # print(rjsoup)
         # print("rjsoup:" , rjsoup)
         # print(type(rjsoup))
         readyDict = {}
@@ -93,6 +100,7 @@ def parseJson(rawjson):
             json.dump(readyJson,dj)
             print("successfully added the json to data.json")
             for i in readyJson:
+                print("i" , i)
                 if i.startswith("Product"):
                     print(i)
                     # title aka name
@@ -104,6 +112,7 @@ def parseJson(rawjson):
                     readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
                 else:
                     pass
+                break
 
     return readyDict
 
