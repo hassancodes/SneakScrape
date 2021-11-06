@@ -21,7 +21,7 @@ def fetchsource(stylecode):
         }
 ###############################################################################################################
 ###############################################################################################################
-# you can add proxies here
+#  just copy paste the working proxies in ip.txt
     counter=0
     ip = randomIp(counter)
     request.proxies= {
@@ -29,7 +29,8 @@ def fetchsource(stylecode):
      "https": ip
     }
     counter += 1
-    soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers, cookies=cookies, proxies=request.proxies).content,"lxml")
+
+    soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers , proxies=request.proxies, cookies=cookies).content,"lxml")
     bod = soup.body
     div = bod.find_all("div", class_="css-h8htgv")
     # checking for the first shoe
@@ -47,6 +48,7 @@ def fetchsource(stylecode):
         mainURL = f"https://stockx.com/{createUrl(sneakdatalist[0])}"
         print("timedelay...")
         time.sleep(10)
+
         soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies, proxies=request.proxies).content,"lxml")
         scriptlist = soupmain.body.find_all("script")
         print("Length of script Lists: " , len(scriptlist))
@@ -59,7 +61,8 @@ def fetchsource(stylecode):
             return rawjson
 
         elif len(scriptlist) == 24:
-            return "Blocked"
+            # "blocked"
+            return {}
         else:
             rawjson = {}
             return rawjson
@@ -84,11 +87,8 @@ def parseJson(rawjson):
             json.dump(readyJson,dj)
             print("successfully added the json to data.json")
 
-            # print(readyJson["ROOT_QUERY"]["primaryTitle"])
-            # # print(readyJson["ROOT_QUERY"]["traits"])
 ########################################################################################
 ########################################################################################
-
             for i in readyJson:
                 if "traits" in readyJson[i]:
                     readyDict["title"] = readyJson[i]["primaryTitle"]
@@ -108,7 +108,6 @@ def addtoExcel(mydict,counter):
     counter +=1
     stylecodes = load_workbook(filename="StyleCodes.xlsx")
     sheet = stylecodes.worksheets[0]
-    # uselessly validation 😂 but necessary
     if  len(mydict)>2:
 
 # # need to work here tomorrow
@@ -127,9 +126,6 @@ def addtoExcel(mydict,counter):
             else:
                 list(filter(lambda x: dataList.append(x) if x!="Not Found" else "pass",ls))
 
-
-
-
         for i in sequence:
             # this list contains the items, if not present in the json  fetched by the web it will be replaced by "not Found"
             rawList = [mydict["traits"][x]["value"] if mydict.get("traits")[x].get("name")==i else "Not Found" for x in range(len(mydict.get("traits")))]
@@ -139,8 +135,6 @@ def addtoExcel(mydict,counter):
         colorway = dataList[1]
         price = dataList[2]
         releaseDate = dataList[3]
-
-
 
         # adding data to excel indices
         sheet[f"B{counter}"] = title
@@ -174,10 +168,9 @@ def iterate(sclist):
         readydict = parseJson(rawjson)
         # make sure to add a counter
         addtoExcel(readydict,counter)
-        time.sleep(random.randint(10,50))
+
+        time.sleep(random.randint(50,90))
 iterate(stylecodelist)
-
-
 
 
 # ######## required exact keys to target from ready json  #############
