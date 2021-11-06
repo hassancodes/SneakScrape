@@ -3,6 +3,7 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 from fake_useragent import UserAgent
 from random import randint
+import random
 
 ####################################################################
 ####################################################################
@@ -48,6 +49,7 @@ def spacefunc():
     print("\n")
 
 
+# getting the divs
 def parseDiv(ls):
     for i in range(len(ls)):
         stripped = str(ls[i]).strip()[8:].strip()
@@ -56,3 +58,63 @@ def parseDiv(ls):
             break
         else:
             pass
+
+#######################################################################
+#######################################################################
+
+def parseIp():
+    proxyList = []
+    with open("ip.txt") as ip:
+        for i in ip:
+            iplist = i.split(":")
+            readyProxy = "".join((iplist[0],":",iplist[1]))
+            proxyList.append(readyProxy)
+
+
+    random.shuffle(proxyList)
+    return proxyList
+
+
+
+
+# import requests
+# url = 'https://api.myip.com'
+# wIpList = parseIp()
+# counter =
+# proxy = {
+# "http":wIpList[counter],
+#  "https":wIpList[counter]
+# }
+#
+# response = requests.get(url, proxies = proxy)
+# print(response.json())
+
+
+
+def randomIp(counter):
+    ipList = parseIp()
+    wIpList = ipList.copy()
+
+    if counter<len(wIpList):
+        # print(counter , ":<", wIpList[counter])
+        return wIpList[counter]
+
+    elif counter > 2*(len(wIpList)) :
+        r = random.randint(0,len(wIpList)-1)
+        # print(r , wIpList[r])
+        # print("random: ", wIpList[r])
+        return wIpList[r]
+
+    elif counter==len(wIpList) or counter < 2*(len(wIpList)):
+        # print(counter , ":=>", wIpList[len(wIpList)-counter] )
+        return wIpList[len(wIpList)-counter]
+
+
+
+# counter=0
+# for i in range(0,1000):
+#     counter +=1
+#     print(i,"===",randomIp(i))
+#     print("\n \n \n")
+#
+# print("LOL: ",counter)

@@ -4,7 +4,7 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import pprint,json,time,random
 # help functions are all present in helpfuncstx.py
-from helpfuncstx import createUrl, getStyleCode, ua,spacefunc, parseDiv
+from helpfuncstx import createUrl, getStyleCode, ua,spacefunc, parseDiv, randomIp
 
 
 
@@ -22,12 +22,14 @@ def fetchsource(stylecode):
 ###############################################################################################################
 ###############################################################################################################
 # you can add proxies here
-    # request.proxy = {
-    #
-    # "http" : "us-dynamic-1.resdleafproxies.com:17133",
-    #  "https" : "us-dynamic-1.resdleafproxies.com:17133"
-    # }
-    soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers, cookies=cookies).content,"lxml")
+    counter=0
+    ip = randomIp(counter)
+    request.proxies= {
+    "http"  : ip,
+     "https": ip
+    }
+    counter += 1
+    soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers, cookies=cookies, proxies=request.proxies).content,"lxml")
     bod = soup.body
     div = bod.find_all("div", class_="css-h8htgv")
     # checking for the first shoe
@@ -39,18 +41,19 @@ def fetchsource(stylecode):
         for i in a:
             sneakdatalist.append(i.get_text())
         print(sneakdatalist)
+
         spacefunc()
         # generating product page link by using createUrl function
         mainURL = f"https://stockx.com/{createUrl(sneakdatalist[0])}"
         print("timedelay...")
         time.sleep(10)
-        soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies).content,"lxml")
+        soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies, proxies=request.proxies).content,"lxml")
         scriptlist = soupmain.body.find_all("script")
         print("Length of script Lists: " , len(scriptlist))
         spacefunc()
         # getting the script with index
 
-        if len(scriptlist) ==28 or len(scriptlist) == 27  or len(scriptlist) == 27:
+        if len(scriptlist) ==28 or len(scriptlist) == 27  or len(scriptlist) == 29:
             scriptindex = parseDiv(scriptlist)
             rawjson = str(scriptindex)[41:-15].strip()
             return rawjson
@@ -76,45 +79,27 @@ def parseJson(rawjson):
         readyDict = {}
         with open("data.json" , "w") as dj:
             readyJson = json.loads(rjsoup.text)
-            # ready json is main json that have the data but still need to be cleaned
-            # print("readyJson: " , readyJson)
+
             spacefunc()
             json.dump(readyJson,dj)
             print("successfully added the json to data.json")
 
             # print(readyJson["ROOT_QUERY"]["primaryTitle"])
             # # print(readyJson["ROOT_QUERY"]["traits"])
-            counter = 0
+########################################################################################
+########################################################################################
+
             for i in readyJson:
-                counter +=1
-                if counter == 2:
+                if "traits" in readyJson[i]:
                     readyDict["title"] = readyJson[i]["primaryTitle"]
                     readyDict["brand"] = readyJson[i]["brand"]
                     readyDict["traits"]  = readyJson[i]["traits"]
                     readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
+                    break
                 else:
                     pass
-            print(readyDict)
 
-        return readyDict
-
-            #
-    #         for i in readyJson:
-    #             keycounter+=1
-    #             if keycounter==2:
-    #                 readyDict["title"] = readyJson[i]["primaryTitle"]
-    #                 readyDict["brand"] = readyJson[i]["brand"]
-    #                 readyDict["traits"]  = readyJson[i]["traits"]
-    #
-    #                 # contains the url for the shoes, it maybe helpful so i added it into the sheet
-    #                 readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
-    #
-    #
-    #             else:
-    #                 pass
-    #         print(readyDict)
-    #
-    # return readyDict
+            return readyDict
 
 ####################################################################
 def addtoExcel(mydict,counter):
@@ -189,7 +174,7 @@ def iterate(sclist):
         readydict = parseJson(rawjson)
         # make sure to add a counter
         addtoExcel(readydict,counter)
-        time.sleep(random.randint(50,100))
+        time.sleep(random.randint(10,50))
 iterate(stylecodelist)
 
 
