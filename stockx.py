@@ -30,7 +30,12 @@ def fetchsource(stylecode):
     }
     counter += 1
 
-    soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers , proxies=request.proxies, cookies=cookies).content,"lxml")
+    # exception to makes sure that we skip bad proxies
+    try:
+        soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers , proxies=request.proxies, cookies=cookies,timeout=10).content,"lxml")
+    except (requests.exceptions.ConnectTimeout ,requests.exceptions.ProxyError,requests.exceptions.ConnectionError):
+        return {}
+
     bod = soup.body
     div = bod.find_all("div", class_="css-h8htgv")
     # checking for the first shoe
@@ -47,9 +52,13 @@ def fetchsource(stylecode):
         # generating product page link by using createUrl function
         mainURL = f"https://stockx.com/{createUrl(sneakdatalist[0])}"
         print("timedelay...")
-        time.sleep(10)
+        time.sleep(random.randint(4,7))
 
-        soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies, proxies=request.proxies).content,"lxml")
+        try:
+            soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies, proxies=request.proxies, timeout=10).content,"lxml")
+        except (requests.exceptions.ConnectTimeout ,requests.exceptions.ProxyError,requests.exceptions.ConnectionError):
+            return {}
+
         scriptlist = soupmain.body.find_all("script")
         print("Length of script Lists: " , len(scriptlist))
         spacefunc()
@@ -89,17 +98,21 @@ def parseJson(rawjson):
 
 ########################################################################################
 ########################################################################################
+            targetList = []
             for i in readyJson:
-                if "traits" in readyJson[i]:
-                    readyDict["title"] = readyJson[i]["primaryTitle"]
-                    readyDict["brand"] = readyJson[i]["brand"]
-                    readyDict["traits"]  = readyJson[i]["traits"]
-                    readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
+                if i.startswith("Product"):
+                    targetList.append(i)
+
+            for prod in targetList:
+                if not (readyJson[prod].get('traits') is None):
+                    readyDict["title"] = readyJson[prod]["primaryTitle"]
+                    readyDict["brand"] = readyJson[prod]["brand"]
+                    readyDict["traits"]  = readyJson[prod]["traits"]
+                    readyDict["media"]  = readyJson[prod]["media"]["imageUrl"]
                     break
                 else:
                     pass
-
-            return readyDict
+        return readyDict
 
 ####################################################################
 def addtoExcel(mydict,counter):
@@ -160,7 +173,9 @@ def addtoExcel(mydict,counter):
 
 # #main logic
 stylecodelist = getStyleCode()
-# stylecodelist = ["eg6608","b41990", "b22537"]
+# this is ready list from excel
+rstyle = list(filter(lambda x:x!=None,stylecodelist))
+
 def iterate(sclist):
     for i in range(len(sclist)):
         counter = i+1
@@ -169,8 +184,8 @@ def iterate(sclist):
         # make sure to add a counter
         addtoExcel(readydict,counter)
 
-        time.sleep(random.randint(50,90))
-iterate(stylecodelist)
+        # time.sleep(random.randint(10,15))
+iterate(rstyle)
 
 
 # ######## required exact keys to target from ready json  #############
