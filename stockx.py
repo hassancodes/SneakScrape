@@ -10,6 +10,7 @@ from helpfuncstx import createUrl, getStyleCode, ua,spacefunc, parseDiv, randomI
 
 def fetchsource(stylecode):
     # starting my session
+
     request = requests.Session()
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
@@ -29,20 +30,25 @@ def fetchsource(stylecode):
      "https": ip
     }
     counter += 1
+    # soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers , proxies=request.proxies, cookies=cookies,timeout=10).content,"lxml")
 
     # exception to makes sure that we skip bad proxies
     try:
         soup = BeautifulSoup(request.get(f"https://stockx.com/search?s={stylecode}", headers=headers , proxies=request.proxies, cookies=cookies,timeout=10).content,"lxml")
     except (requests.exceptions.ConnectTimeout ,requests.exceptions.ProxyError,requests.exceptions.ConnectionError):
+        print("Unable to connect proxy1")
         return {}
 
     bod = soup.body
     div = bod.find_all("div", class_="css-h8htgv")
     # checking for the first shoe
     try:
+    ######################################
         a = div[0].find_all('p')
 
         # this list will have title, prize and one thing more that I forgot
+
+        # global sneakdatalist
         sneakdatalist = []
         for i in a:
             sneakdatalist.append(i.get_text())
@@ -57,7 +63,13 @@ def fetchsource(stylecode):
         try:
             soupmain = BeautifulSoup(request.get(mainURL,headers=headers, cookies=cookies, proxies=request.proxies, timeout=10).content,"lxml")
         except (requests.exceptions.ConnectTimeout ,requests.exceptions.ProxyError,requests.exceptions.ConnectionError):
+            print("Unable to connect proxy2")
             return {}
+            # using the trick even if i Get blocked by the web, still i will be able to get the name of the sneaker. boo yeahh
+            # if len(sneakdatalist)>0:
+            #     return {"sneakername" : sneakdatalist[0]}
+            # else:
+            #     return {}
 
         scriptlist = soupmain.body.find_all("script")
         print("Length of script Lists: " , len(scriptlist))
@@ -69,9 +81,12 @@ def fetchsource(stylecode):
             rawjson = str(scriptindex)[41:-15].strip()
             return rawjson
 
-        elif len(scriptlist) == 24:
-            # "blocked"
-            return {}
+        elif len(scriptlist) == 24 or len(scriptlist) == 23:
+            if len(sneakdatalist)>0:
+                return {"sneakername" : sneakdatalist[0]}
+            else:
+                return {}
+
         else:
             rawjson = {}
             return rawjson
@@ -84,6 +99,8 @@ def parseJson(rawjson):
 
     if rawjson == {}:
         return {}
+    elif dict(rawjson).get("sneakername") != None:
+        return rawjson
     # elif rawjson == "Blocked":
 
     elif rawjson != {}:
@@ -158,6 +175,15 @@ def addtoExcel(mydict,counter):
         sheet[f"G{counter}"] = url
 
         print(f"added data to index {counter}")
+    elif len(mydict) ==1:
+
+        sheet[f"B{counter}"] =  mydict.get("sneakername")
+        sheet[f"C{counter}"] = "Not found"
+        sheet[f"D{counter}"] = "Not found"
+        sheet[f"E{counter}"] = "Not found"
+        sheet[f"F{counter}"] = "Not found"
+        print(f"index {counter} add sneaker name")
+
     else:
 
         sheet[f"B{counter}"] = "Not found"
@@ -165,7 +191,7 @@ def addtoExcel(mydict,counter):
         sheet[f"D{counter}"] = "Not found"
         sheet[f"E{counter}"] = "Not found"
         sheet[f"F{counter}"] = "Not found"
-        print(f"index {counter} Not found")
+        print(f"index {counter} not found")
 
     stylecodes.save("StyleCodes.xlsx")
 
@@ -175,11 +201,12 @@ def addtoExcel(mydict,counter):
 stylecodelist = getStyleCode()
 # this is ready list from excel
 rstyle = list(filter(lambda x:x!=None,stylecodelist))
-
+#
 def iterate(sclist):
     for i in range(len(sclist)):
         counter = i+1
         rawjson = fetchsource(sclist[i])
+        # rawjson = fetchsource("GW3355")
         readydict = parseJson(rawjson)
         # make sure to add a counter
         addtoExcel(readydict,counter)
@@ -187,6 +214,7 @@ def iterate(sclist):
         # time.sleep(random.randint(10,15))
 iterate(rstyle)
 
+# print(sneakdatalist)
 
 # ######## required exact keys to target from ready json  #############
 # "primaryTitle"                                                      #
