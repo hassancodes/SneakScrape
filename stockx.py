@@ -4,7 +4,8 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import pprint,json,time,random
 # help functions are all present in helpfuncstx.py
-from helpfuncstx import createUrl, getStyleCode, ua,spacefunc, parseDiv, randomIp
+from helpfuncstx import createUrl, getStyleCode, ua
+from helpfuncstx import spacefunc, parseDiv, randomIp,successRate, chooseOption
 
 
 
@@ -91,6 +92,7 @@ def fetchsource(stylecode):
             rawjson = {}
             return rawjson
     except:
+        print("################")
         return {}
 
 
@@ -99,7 +101,7 @@ def parseJson(rawjson):
 
     if rawjson == {}:
         return {}
-    elif dict(rawjson).get("sneakername") != None:
+    elif len(rawjson) == 1:
         return rawjson
     # elif rawjson == "Blocked":
 
@@ -203,17 +205,33 @@ stylecodelist = getStyleCode()
 rstyle = list(filter(lambda x:x!=None,stylecodelist))
 #
 def iterate(sclist):
+    mainlist = sclist
+    index = chooseOption(sclist)
+    if index == 1:
+        # adding 1 to index so we can add the data to correct location.
+        index +=1
+        print("Scraping from Start....")
+
+    elif index != 1 and index != None:
+        counter = index-2
+        sclist = sclist[index-2:]
+        print("rsclist:" ,sclist[0])
+
     for i in range(len(sclist)):
-        counter = i+1
+        counter = int(index)+i-1
+        # print(counter)
         rawjson = fetchsource(sclist[i])
         # rawjson = fetchsource("GW3355")
         readydict = parseJson(rawjson)
         # make sure to add a counter
         addtoExcel(readydict,counter)
 
+
         # time.sleep(random.randint(10,15))
 iterate(rstyle)
 
+# function for checking success rate
+print(successRate(rstyle))
 # print(sneakdatalist)
 
 # ######## required exact keys to target from ready json  #############
@@ -223,5 +241,3 @@ iterate(rstyle)
 # "brand"                                                             #
 # "Media" to get the url and image                                    #
 # #####################################################################
-# # fetching scripts
-# # 35435:36173

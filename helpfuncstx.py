@@ -6,6 +6,35 @@ from random import randint
 import random
 
 ####################################################################
+def chooseOption(ls):
+    print("Choose 1 or 2 \n1.) Start scraping from index 1 \n2.) Start scrapping from a specific index.\nEnter Below:")
+    try:
+        inp = int(input())
+        if inp==1:
+            print("starting script from index 1")
+            # we will subtract index-1 later in stockx.py so we can get the correct index
+            return 1
+        elif inp == 2:
+            try:
+                print("input the index number from excel: ")
+                rindex = input()
+                index = int(rindex)
+                if index<len(ls) and index>0:
+                    print(f"Starting scraping from index {index}")
+                    # this index can be used in stockx.py
+                    return index
+                else:
+                    print("invalid input: Enter a valid Index!")
+            except:
+                print("invalid input: Enter a valid Index!")
+        else:
+            print("invalid input")
+            return None
+    except:
+        print("invalid input! You can only choose 1 or 2")
+
+
+
 ####################################################################
 # function to generate the main url.
 # this functions converts - ""adidas Crazy BYW X 2.0 Ubiq" to "adidas-crazy-byw-x-2-ubiq"
@@ -110,11 +139,18 @@ def randomIp(counter):
         return wIpList[len(wIpList)-counter]
 
 
+############################Function for checking successrate of a script####################################
 
-# counter=0
-# for i in range(0,1000):
-#     counter +=1
-#     print(i,"===",randomIp(i))
-#     print("\n \n \n")
-#
-# print("LOL: ",counter)
+def successRate(ls):
+    totalEntries = len(ls)
+    styleCodes = load_workbook("StyleCodes.xlsx")
+    sheet = styleCodes.active
+    rawsdList = [x.value for x in sheet["B"]]
+# main style code list
+    unfilterls = rawsdList[1:]
+    filteredls = list(filter(lambda x:x!=None and x!="Not found",unfilterls))
+    print("Total Shoes Entries: ", totalEntries)
+    print("Successfully added Sneaker Name: ", len(filteredls))
+    return f"Success rate is: {round((len(filteredls)/totalEntries)*100 , 2)}%"
+
+##################################
