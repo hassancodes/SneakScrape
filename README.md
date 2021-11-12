@@ -5,16 +5,15 @@ A scraper for scraping **stockx and goat.com**
 3) clean it ✅
 4) add data to excel (working) ✅
 5) Make the script run 100s of time (working)✅
-6) write documentation✅
-
+6) add support of proxies✅
+7) write documentation✅
 
 
 #Extra features
-
 * Added successRate function(to return the percentage of scrapping success)✅
 * ChooseOption() function added that will help the user to parse the style code from a specific index.✅
 
-# Currently Working:
 
+# Currently Working:
 #### Writing code to integrate "goat.com"
 * if the we are not able to scrape the shoe code on stockx.com. we can search it on goat.com to increase our success rate.
