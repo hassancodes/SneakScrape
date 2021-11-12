@@ -1,41 +1,7 @@
-# import json
-# with open("data.json",'r') as fp:
-#     readyJson = json.load(fp)
-#     readyDict = {}
-#     # for i in readyJson:
-#     #     if not (readyJson[i].get('traits') is None):
-#     #         readyDict["title"] = readyJson[i]["primaryTitle"]
-#     #         readyDict["brand"] = readyJson[i]["brand"]
-#     #         readyDict["traits"]  = readyJson[i]["traits"]
-#     #         readyDict["media"]  = readyJson[i]["media"]["imageUrl"]
-#     #     else:
-#     #         print("\n \n \n")
-#     #         print(i)
-#     #         pass
-#
-#     targetList = []
-#     for i in readyJson:
-#         if i.startswith("Product"):
-#             targetList.append(i)
-#
-#     print(targetList)
-#     print("\n \n \n")
-#     for prod in targetList:
-#         if not (readyJson[prod].get('traits') is None):
-#             readyDict["title"] = readyJson[prod]["primaryTitle"]
-#             readyDict["brand"] = readyJson[prod]["brand"]
-#             readyDict["traits"]  = readyJson[prod]["traits"]
-#             readyDict["media"]  = readyJson[prod]["media"]["imageUrl"]
-#             break
-#         else:
-#             pass
-#
-#     print(readyDict)
-
+import json
 import requests
-try:
-    a = requests.get("https://google.com" ,timeout=10)
-except requests.exceptions.ConnectTimeout:
-    print({})
 
-print(a.status_code)
+url = 'https://2fwotdvm2o-dsn.algolia.net/1/indexes/product_variants_v2/query?x-algolia-agent=Algolia for vanilla JavaScript 3.25.1&x-algolia-application-id=2FWOTDVM2O&x-algolia-api-key=ac96de6fef0e02bb95d433d8d5c7038a'
+data = {"params":"distinct=true&facetFilters=()&facets=%5B%22size%22%5D&hitsPerPage=20&numericFilters=%5B%5D&page=0&query="}
+r = requests.post(url, data=json.dumps(data))
+print(r.json()['hits'][0])
