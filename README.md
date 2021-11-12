@@ -12,3 +12,4 @@ A scraper for scraping **stockx and goat.com**
 #Extra features
 
 * Added successRate function(to return the percentage of scrapping success)✅
+* ChooseOption() function added that will help the user to parse the style code from a specific index.✅
