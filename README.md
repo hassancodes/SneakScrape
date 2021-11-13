@@ -20,4 +20,6 @@ A scraper for scraping **stockx and goat.com**
 
 Note: 
 * Proxies are required to make it work
+* Place the proxies in the ip.txt file
+* I used the leafproxies.
 
