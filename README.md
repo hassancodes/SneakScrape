@@ -17,3 +17,7 @@ A scraper for scraping **stockx and goat.com**
 # Currently Working:
 #### Writing code to integrate "goat.com"
 * if the we are not able to scrape the shoe code on stockx.com. we can search it on goat.com to increase our success rate.
+
+Note: 
+* Proxies are required to make it work
+
